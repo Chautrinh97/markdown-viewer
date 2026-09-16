@@ -66,10 +66,17 @@ body.dark .m-button {
 /*---------------------------------------------------------------------------*/
 /*button*/
 
-/*defaults button*/
-#popup button:nth-child(2) { float: right; }
+/*top toolbar*/
+.m-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.m-toolbar + .m-toolbar { margin-top: 8px; }
+.m-btn-push { margin-left: auto; }
 /*advanced options button*/
-#popup button:nth-child(2n+3) { float: right; margin-top: 20px; }
+.m-btn-advanced { float: right; margin-top: 20px; }
 
 .m-button {
   background-color: #ececec !important;

@@ -64,6 +64,14 @@ md.messages = ({storage: {defaults, state, set}, compilers, mathjax, xhr, webreq
       notifyContent({message: 'raw', raw: req.raw})
       sendResponse()
     }
+    else if (req.message === 'popup.enabled') {
+      set({enabled: req.enabled})
+      icon()
+      chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+        tabs[0] && chrome.tabs.reload(tabs[0].id)
+      })
+      sendResponse()
+    }
     else if (req.message === 'popup.themes') {
       set({themes: req.themes})
       notifyContent({message: 'themes', themes: req.themes})

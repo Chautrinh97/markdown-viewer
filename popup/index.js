@@ -52,6 +52,7 @@ var Popup = () => {
       'tiny',
     ],
     raw: false,
+    enabled: true,
     tab: '',
     tabs: ['theme', 'compiler', 'content'],
     compilers: [],
@@ -130,6 +131,14 @@ var Popup = () => {
       })
     },
 
+    enabled: () => {
+      state.enabled = !state.enabled
+      chrome.runtime.sendMessage({
+        message: 'popup.enabled',
+        enabled: state.enabled
+      })
+    },
+
     defaults: () => {
       chrome.runtime.sendMessage({
         message: 'popup.defaults'
@@ -153,6 +162,7 @@ var Popup = () => {
     state.themes = res.themes
 
     state.raw = res.raw
+    state.enabled = res.enabled
     state.tab = localStorage.getItem('tab') || 'theme'
     state.compilers = res.compilers
     state.description.compiler = res.description
@@ -189,19 +199,30 @@ var Popup = () => {
 
   var render = () =>
     m('#popup',
-      // raw
-      m('button.mdc-button mdc-button--raised m-button', {
-        oncreate: oncreate.ripple,
-        onclick: events.raw
-        },
-        (state.raw ? 'Html' : 'Markdown')
+      m('.m-toolbar',
+        // raw
+        m('button.mdc-button mdc-button--raised m-button', {
+          oncreate: oncreate.ripple,
+          onclick: events.raw
+          },
+          (state.raw ? 'Html' : 'Markdown')
+        ),
+        // defaults
+        m('button.mdc-button mdc-button--raised m-button m-btn-push', {
+          oncreate: oncreate.ripple,
+          onclick: events.defaults
+          },
+          'Defaults'
+        ),
       ),
-      // defaults
-      m('button.mdc-button mdc-button--raised m-button', {
-        oncreate: oncreate.ripple,
-        onclick: events.defaults
-        },
-        'Defaults'
+      m('.m-toolbar',
+        // enabled
+        m('button.mdc-button mdc-button--raised m-button', {
+          oncreate: oncreate.ripple,
+          onclick: events.enabled
+          },
+          (state.enabled ? 'Enabled' : 'Disabled')
+        ),
       ),
 
       // tabs
@@ -298,7 +319,7 @@ var Popup = () => {
       ),
 
       // advanced options
-      m('button.mdc-button mdc-button--raised m-button', {
+      m('button.mdc-button mdc-button--raised m-button m-btn-advanced', {
         oncreate: oncreate.ripple,
         onclick: events.advanced
         },

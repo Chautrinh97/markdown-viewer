@@ -39,6 +39,7 @@ md.storage.defaults = (compilers) => {
   var match = '\\.(?:markdown|mdown|mkdn|md|mkd|mdwn|mdtxt|mdtext|text)(?:#.*|\\?.*)?$'
 
   var defaults = {
+    enabled: true,
     theme: 'github',
     compiler: 'markdown-it',
     raw: false,
@@ -205,5 +206,8 @@ md.storage.migrations = (state) => {
     state.plantuml = {
       server: 'https://www.plantuml.com/plantuml'
     }
+  }
+  if (state.enabled === undefined) {
+    state.enabled = true
   }
 }

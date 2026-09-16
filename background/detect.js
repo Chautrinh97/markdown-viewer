@@ -28,6 +28,10 @@ md.detect = ({storage: {state}, inject}) => {
 
   var tab = (id, info, tab) => {
 
+    if (!state.enabled) {
+      return
+    }
+
     if (info.status === 'loading') {
       ff(id, info, (action) => {
         if (action === 'noop') {
