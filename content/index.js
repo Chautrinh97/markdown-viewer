@@ -13,6 +13,7 @@ var state = {
   html: '',
   markdown: '',
   toc: '',
+  tocCollapsed: false,
   reload: {
     interval: null,
     ms: 1000,
@@ -205,7 +206,17 @@ function mount () {
 
         if (state.content.toc) {
           dom.push(m('#_toc.tex2jax-ignore', m.trust(state.toc)))
+          dom.push(m('#_toc-toggle', {
+            title: state.tocCollapsed ? 'Show table of contents' : 'Hide table of contents',
+            onclick: () => {
+              state.tocCollapsed = !state.tocCollapsed
+              m.redraw()
+            }
+            },
+            state.tocCollapsed ? '›' : '‹'
+          ))
           state.raw ? $('body').classList.remove('_toc-left') : $('body').classList.add('_toc-left')
+          state.tocCollapsed ? $('body').classList.add('_toc-collapsed') : $('body').classList.remove('_toc-collapsed')
         }
 
         if (state.theme === 'custom') {

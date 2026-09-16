@@ -205,7 +205,9 @@ Alternatively code blocks can be wrapped in HTML tags:
 
 ## ToC
 
-Generates Table of Contents (ToC) based on the headers found in the markdown document.
+Generates a Table of Contents (ToC) sidebar based on the headers found in the markdown document.
+
+Click the arrow tab on the edge of the sidebar to collapse or expand it.
 
 ---
 
