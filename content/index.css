@@ -340,6 +340,16 @@ svg[id^=mermaid] text {
   stroke: none !important;
 }
 
+/*plantuml*/
+.markdown-body code.plantuml,
+.markdown-theme code.plantuml {
+  display: block;
+}
+img.plantuml {
+  max-width: 100%;
+  height: auto;
+}
+
 /*emojione*/
 .emojione {
   /* Emoji Sizing */

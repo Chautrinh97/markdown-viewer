@@ -51,6 +51,7 @@ md.storage.defaults = (compilers) => {
       emoji: false,
       mathjax: false,
       mermaid: false,
+      plantuml: false,
       syntax: true,
       toc: false,
     },
@@ -68,6 +69,9 @@ md.storage.defaults = (compilers) => {
     custom: {
       theme: '',
       color: 'auto',
+    },
+    plantuml: {
+      server: 'https://www.plantuml.com/plantuml',
     }
   }
 
@@ -191,6 +195,15 @@ md.storage.migrations = (state) => {
     state.custom = {
       theme: '',
       color: 'auto'
+    }
+  }
+  // v5.3 -> v5.4
+  if (state.content.plantuml === undefined) {
+    state.content.plantuml = false
+  }
+  if (state.plantuml === undefined) {
+    state.plantuml = {
+      server: 'https://www.plantuml.com/plantuml'
     }
   }
 }

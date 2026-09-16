@@ -18,6 +18,7 @@
 - Table of Contents (ToC)
 - MathJax formulas ([mathjax])
 - Mermaid diagrams ([mermaid])
+- PlantUML diagrams ([plantuml])
 - Convert emoji shortnames (icons provided free by [EmojiOne][emojione])
 - Remember scroll position
 - Markdown Content-Type detection
@@ -116,6 +117,7 @@ Full **CommonMark** support including **GFM** tables and strikethrough **+**
 | **emoji**      | `false` | Convert emoji `:shortnames:` into EmojiOne images
 | **mathjax**    | `false` | Render MathJax formulas
 | **mermaid**    | `false` | Render Mermaid diagrams
+| **plantuml**   | `false` | Render PlantUML diagrams
 | **syntax**     | **`true`**  | Syntax highlighted fenced code blocks
 | **toc**        | `false` | Generate Table of Contents
 
@@ -164,6 +166,26 @@ Alternatively diagrams can be wrapped in HTML tags:
 - resize the diagram container vertically by dragging the bottom right corner of the code block up or down
 - zoom in and out by holding down the Shift key and then using your mouse wheel
 - pan by holding down the left mouse button and drag in any direction
+
+## PlantUML
+
+Render PlantUML diagrams wrapped in `plantuml`, `puml` or `uml` fenced code blocks:
+
+    ```plantuml
+    Bob -> Alice : hello
+    ```
+
+Alternatively diagrams can be wrapped in HTML tags:
+
+```html
+<pre><code class="plantuml">
+  Bob -> Alice : hello
+</code></pre>
+```
+
+Diagrams are rendered as SVG images by encoding the diagram source and requesting it from a PlantUML server. By default the public server at [plantuml.com][plantuml] is used, but a different server URL (e.g. a self-hosted instance) can be configured on the Advanced Options page.
+
+> The diagram source is sent to the configured PlantUML server in order to render it. Use a self-hosted server if you don't want your diagram content sent to a third party.
 
 ## Syntax
 
@@ -378,6 +400,7 @@ SOFTWARE.
   [emojione]: https://emojione.com
   [mathjax]: https://www.mathjax.org
   [mermaid]: https://mermaid.js.org
+  [plantuml]: https://plantuml.com
   [prism]: https://prismjs.com
   [github-theme]: https://github.com/sindresorhus/github-markdown-css
   [cleanrmd]: https://pkg.garrickadenbuie.com/cleanrmd/#themes

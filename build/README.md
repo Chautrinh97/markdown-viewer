@@ -31,6 +31,7 @@ sh build/package.sh
 | prismjs             | 1.29.0
 | csso                | 5.0.5
 | @panzoom/panzoom    | 4.5.1
+| plantuml-encoder    | 1.4.0
 | **markdown-it**
 | markdown-it            | 13.0.1
 | markdown-it-abbr       | 1.0.4

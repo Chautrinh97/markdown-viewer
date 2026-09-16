@@ -64,6 +64,7 @@ var Popup = () => {
         toc: 'Generate Table of Contents',
         mathjax: 'Render MathJax formulas',
         mermaid: 'Mermaid diagrams',
+        plantuml: 'PlantUML diagrams',
         syntax: 'Syntax highlighting for fenced code blocks',
       }
     },
@@ -406,6 +407,8 @@ var Popup = () => {
             ))
           )
         ),
+        state.content.plantuml &&
+        plantuml.render()
       ),
     )
 
@@ -421,4 +424,5 @@ if (document.querySelector('.is-popup')) {
 else {
   var settings = Settings()
   var custom = Custom()
+  var plantuml = Plantuml()
 }

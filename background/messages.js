@@ -159,6 +159,12 @@ md.messages = ({storage: {defaults, state, set}, compilers, mathjax, xhr, webreq
         }
       })
     }
+    else if (req.message === 'plantuml.get') {
+      sendResponse(state.plantuml)
+    }
+    else if (req.message === 'plantuml.set') {
+      set({plantuml: req.plantuml}).then(sendResponse)
+    }
 
     return true
   }

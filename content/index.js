@@ -8,6 +8,7 @@ var state = {
   content: args.content,
   compiler: args.compiler,
   custom: args.custom,
+  plantuml: args.plantuml,
   icon: args.icon,
   html: '',
   markdown: '',
@@ -107,6 +108,10 @@ var update = (update) => {
     setTimeout(() => mmd.render(), 40)
   }
 
+  if (state.content.plantuml) {
+    setTimeout(() => pu.render(), 40)
+  }
+
   if (state.content.mathjax) {
     setTimeout(() => mj.render(), 60)
   }
@@ -127,6 +132,12 @@ var render = (md) => {
       state.html = state.html.replace(
         /<code class="language-(?:mermaid|mmd)">/gi,
         '<code class="mermaid">'
+      )
+    }
+    if (state.content.plantuml) {
+      state.html = state.html.replace(
+        /<code class="language-(?:plantuml|puml|uml)">/gi,
+        '<code class="plantuml">'
       )
     }
     if (state.content.toc) {
