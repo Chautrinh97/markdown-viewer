@@ -9,37 +9,16 @@ var Popup = () => {
     themes: {},
     _themes: [
       'github',
-      'github-dark',
-      // 'air',
-      'almond',
-      'awsm',
-      'axist',
       'bamboo',
-      'bullframe',
       'holiday',
-      'kacit',
-      'latex',
-      'marx',
-      'mini',
-      'modest',
       'new',
       'no-class',
       'pico',
-      'retro',
       'sakura',
-      'sakura-vader',
-      'semantic',
       'simple',
-      // 'splendor',
-      'style-sans',
-      'style-serif',
-      'stylize',
       'superstylin',
-      'tacit',
       'vanilla',
       'water',
-      'water-dark',
-      'writ',
       'custom',
     ],
     _width: [
@@ -53,11 +32,8 @@ var Popup = () => {
     ],
     _themePairs: {
       'github': 'github-dark',
-      'github-dark': 'github',
       'sakura': 'sakura-vader',
-      'sakura-vader': 'sakura',
       'water': 'water-dark',
-      'water-dark': 'water',
     },
     raw: false,
     enabled: true,
@@ -79,6 +55,9 @@ var Popup = () => {
     },
     settings: {}
   }
+
+  var canonical = (theme) =>
+    Object.keys(state._themePairs).filter((light) => state._themePairs[light] === theme)[0] || theme
 
   var events = {
     tab: (e) => {
@@ -124,19 +103,22 @@ var Popup = () => {
     },
 
     theme: (e) => {
-      state.theme = state._themes[e.target.selectedIndex]
+      var next = state._themes[e.target.selectedIndex]
+      var wasDark = state._themePairs[canonical(state.theme)] === state.theme
+      state.theme = (wasDark && state._themePairs[next]) ? state._themePairs[next] : next
       chrome.runtime.sendMessage({
         message: 'popup.theme',
         theme: state.theme
       })
     },
 
-    themeMode: () => {
-      var pair = state._themePairs[state.theme]
-      if (!pair) {
+    themeMode: (e) => {
+      var canon = canonical(state.theme)
+      var dark = state._themePairs[canon]
+      if (!dark) {
         return
       }
-      state.theme = pair
+      state.theme = e.target.checked ? dark : canon
       chrome.runtime.sendMessage({
         message: 'popup.theme',
         theme: state.theme
@@ -211,6 +193,7 @@ var Popup = () => {
     var value = tab === 'compiler' ? state.options[key]
       : tab === 'content' ? state.content[key]
       : tab === 'enabled' ? state.enabled
+      : tab === 'theme-mode' ? state._themePairs[canonical(state.theme)] === state.theme
       : null
 
     if (vnode.dom.classList.contains('is-checked') !== value) {
@@ -273,18 +256,24 @@ var Popup = () => {
             onchange: events.theme
             },
             state._themes.map((theme) =>
-              m('option', {selected: state.theme === theme}, theme)
+              m('option', {selected: canonical(state.theme) === theme}, theme)
             )
           ),
-          m('button.mdc-button mdc-button--raised m-button m-btn-theme-mode', {
-            oncreate: oncreate.ripple,
-            onclick: events.themeMode,
-            disabled: !state._themePairs[state.theme],
-            title: state._themePairs[state.theme] ? '' : 'This theme has no light/dark counterpart'
+          (state.theme !== 'custom') &&
+          m('label.mdc-switch m-switch m-switch-theme-mode', {
+            onupdate: onupdate('theme-mode'),
+            title: state._themePairs[canonical(state.theme)]
+              ? 'Dark Theme'
+              : 'This theme follows your system light/dark setting'
             },
-            state._themePairs[state.theme]
-              ? `Switch to ${state._themePairs[state.theme]}`
-              : 'No Light/Dark Variant'
+            m('input.mdc-switch__native-control', {
+              type: 'checkbox',
+              checked: state._themePairs[canonical(state.theme)] === state.theme,
+              disabled: !state._themePairs[canonical(state.theme)],
+              onchange: events.themeMode
+            }),
+            m('.mdc-switch__background', m('.mdc-switch__knob')),
+            m('span.mdc-switch-label', 'Dark Theme')
           ),
           m('select.mdc-elevation--z2 m-select', {
             onchange: events.themes
@@ -379,8 +368,32 @@ var Popup = () => {
                 onchange: events.theme
                 },
                 state._themes.map((theme) =>
-                  m('option', {selected: state.theme === theme}, theme)
+                  m('option', {selected: canonical(state.theme) === theme}, theme)
                 )
+              )
+            ),
+          ),
+          (state.theme !== 'custom') &&
+          m('.row',
+            m('.col-xxl-6.col-xl-6.col-lg-6.col-md-6.col-sm-12',
+              m('span.m-label',
+                'Dark Theme'
+              )
+            ),
+            m('.col-xxl-6.col-xl-6.col-lg-6.col-md-6.col-sm-12',
+              m('label.mdc-switch m-switch', {
+                onupdate: onupdate('theme-mode'),
+                title: state._themePairs[canonical(state.theme)]
+                  ? ''
+                  : 'This theme follows your system light/dark setting'
+                },
+                m('input.mdc-switch__native-control', {
+                  type: 'checkbox',
+                  checked: state._themePairs[canonical(state.theme)] === state.theme,
+                  disabled: !state._themePairs[canonical(state.theme)],
+                  onchange: events.themeMode
+                }),
+                m('.mdc-switch__background', m('.mdc-switch__knob'))
               )
             ),
           ),

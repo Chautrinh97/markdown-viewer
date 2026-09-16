@@ -10,7 +10,7 @@
 - Granular access to remote origins
 - Multiple markdown parsers
 - Full control over the compiler options ([markdown-it], [marked], [remark])
-- 30+ Themes ([cleanrmd], [GitHub][github-theme])
+- 11 Themes with a dedicated dark/light toggle ([cleanrmd], [GitHub][github-theme])
 - Custom theme support
 - GitHub Flavored Markdown (GFM)
 - Auto reload on file change
@@ -70,7 +70,11 @@ All themes support the following width options:
 - `small` - fixed at 768px
 - `tiny` - fixed at 576px
 
-The `auto` option on the `github` and `github-dark` themes has a fixed width with a surrounding border identical to a rendered `README.md` file for a repository hosted on github.com
+The `auto` option on the `github` theme has a fixed width with a surrounding border identical to a rendered `README.md` file for a repository hosted on github.com
+
+## Dark Theme
+
+`github`, `sakura` and `water` each have a real dark counterpart — use the `Dark Theme` switch next to the Content Theme dropdown to toggle it. The remaining themes already adapt automatically to your system's light/dark setting, so the switch is disabled for them.
 
 ## Custom Theme
 

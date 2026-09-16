@@ -212,4 +212,12 @@ md.storage.migrations = (state) => {
   if (state.enabled === undefined) {
     state.enabled = true
   }
+  // v5.4 -> v5.5 (themes without a light/dark pair or auto adaptation were removed)
+  if ([
+    'almond', 'awsm', 'axist', 'bullframe', 'kacit', 'latex', 'marx', 'mini',
+    'modest', 'retro', 'semantic', 'style-sans', 'style-serif', 'stylize',
+    'tacit', 'writ',
+  ].includes(state.theme)) {
+    state.theme = 'github'
+  }
 }
