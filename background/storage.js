@@ -13,26 +13,28 @@ md.storage = ({compilers}) => {
     Object.assign(state, options)
   }
 
-  chrome.storage.sync.get((res) => {
-    md.storage.bug(res)
+  var ready = new Promise((resolve) => {
+    chrome.storage.sync.get((res) => {
+      md.storage.bug(res)
 
-    Object.assign(state, JSON.parse(JSON.stringify(
-      !Object.keys(res).length ? defaults : res)))
+      Object.assign(state, JSON.parse(JSON.stringify(
+        !Object.keys(res).length ? defaults : res)))
 
-    // in case of new providers from the compilers branch
-    Object.keys(compilers).forEach((compiler) => {
-      if (!state[compiler]) {
-        state[compiler] = compilers[compiler].defaults
-      }
+      // in case of new providers from the compilers branch
+      Object.keys(compilers).forEach((compiler) => {
+        if (!state[compiler]) {
+          state[compiler] = compilers[compiler].defaults
+        }
+      })
+
+      // mutate
+      md.storage.migrations(state)
+
+      set(state).then(resolve)
     })
-
-    // mutate
-    md.storage.migrations(state)
-
-    set(state)
   })
 
-  return {defaults, state, set}
+  return {defaults, state, set, ready}
 }
 
 md.storage.defaults = (compilers) => {

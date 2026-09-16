@@ -65,12 +65,13 @@ md.messages = ({storage: {defaults, state, set}, compilers, mathjax, xhr, webreq
       sendResponse()
     }
     else if (req.message === 'popup.enabled') {
-      set({enabled: req.enabled})
-      icon()
-      chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-        tabs[0] && chrome.tabs.reload(tabs[0].id)
+      set({enabled: req.enabled}).then(() => {
+        icon()
+        chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+          tabs[0] && chrome.tabs.reload(tabs[0].id)
+        })
+        sendResponse()
       })
-      sendResponse()
     }
     else if (req.message === 'popup.themes') {
       set({themes: req.themes})
@@ -149,9 +150,10 @@ md.messages = ({storage: {defaults, state, set}, compilers, mathjax, xhr, webreq
     }
     // settings options
     else if (req.message === 'options.icon') {
-      set({settings: req.settings})
-      icon()
-      sendResponse()
+      set({settings: req.settings}).then(() => {
+        icon()
+        sendResponse()
+      })
     }
     else if (req.message === 'options.theme') {
       set({settings: req.settings})

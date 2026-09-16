@@ -73,14 +73,22 @@ body.dark .m-button {
   flex-wrap: wrap;
   gap: 8px;
 }
-.m-toolbar + .m-toolbar { margin-top: 8px; }
 .m-btn-push { margin-left: auto; }
 /*advanced options button*/
 .m-btn-advanced { float: right; margin-top: 20px; }
+/*theme light/dark toggle*/
+.m-btn-theme-mode {
+  width: 100%;
+  margin-top: 10px;
+}
 
 .m-button {
   background-color: #ececec !important;
   color: #000 !important;
+}
+.m-button:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 .m-button:before {
   background-color: rgba(96, 125, 139, 0.56) !important;
@@ -121,6 +129,11 @@ body.dark .m-button {
 }
 .m-switch:last-child {
   margin-bottom: 10px;
+}
+.m-switch-enabled {
+  margin: 0 0 16px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e0e0e0;
 }
 .m-switch .mdc-switch__background {
   display: inline-block;

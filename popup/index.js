@@ -51,6 +51,14 @@ var Popup = () => {
       'small',
       'tiny',
     ],
+    _themePairs: {
+      'github': 'github-dark',
+      'github-dark': 'github',
+      'sakura': 'sakura-vader',
+      'sakura-vader': 'sakura',
+      'water': 'water-dark',
+      'water-dark': 'water',
+    },
     raw: false,
     enabled: true,
     tab: '',
@@ -117,6 +125,18 @@ var Popup = () => {
 
     theme: (e) => {
       state.theme = state._themes[e.target.selectedIndex]
+      chrome.runtime.sendMessage({
+        message: 'popup.theme',
+        theme: state.theme
+      })
+    },
+
+    themeMode: () => {
+      var pair = state._themePairs[state.theme]
+      if (!pair) {
+        return
+      }
+      state.theme = pair
       chrome.runtime.sendMessage({
         message: 'popup.theme',
         theme: state.theme
@@ -190,6 +210,7 @@ var Popup = () => {
   var onupdate = (tab, key) => (vnode) => {
     var value = tab === 'compiler' ? state.options[key]
       : tab === 'content' ? state.content[key]
+      : tab === 'enabled' ? state.enabled
       : null
 
     if (vnode.dom.classList.contains('is-checked') !== value) {
@@ -199,6 +220,20 @@ var Popup = () => {
 
   var render = () =>
     m('#popup',
+      // enabled
+      m('label.mdc-switch m-switch m-switch-enabled', {
+        onupdate: onupdate('enabled'),
+        title: 'Enable or disable Markdown Viewer'
+        },
+        m('input.mdc-switch__native-control', {
+          type: 'checkbox',
+          name: 'enabled',
+          checked: state.enabled,
+          onchange: events.enabled
+        }),
+        m('.mdc-switch__background', m('.mdc-switch__knob')),
+        m('span.mdc-switch-label', 'Enable Extension')
+      ),
       m('.m-toolbar',
         // raw
         m('button.mdc-button mdc-button--raised m-button', {
@@ -213,15 +248,6 @@ var Popup = () => {
           onclick: events.defaults
           },
           'Defaults'
-        ),
-      ),
-      m('.m-toolbar',
-        // enabled
-        m('button.mdc-button mdc-button--raised m-button', {
-          oncreate: oncreate.ripple,
-          onclick: events.enabled
-          },
-          (state.enabled ? 'Enabled' : 'Disabled')
         ),
       ),
 
@@ -249,6 +275,16 @@ var Popup = () => {
             state._themes.map((theme) =>
               m('option', {selected: state.theme === theme}, theme)
             )
+          ),
+          m('button.mdc-button mdc-button--raised m-button m-btn-theme-mode', {
+            oncreate: oncreate.ripple,
+            onclick: events.themeMode,
+            disabled: !state._themePairs[state.theme],
+            title: state._themePairs[state.theme] ? '' : 'This theme has no light/dark counterpart'
+            },
+            state._themePairs[state.theme]
+              ? `Switch to ${state._themePairs[state.theme]}`
+              : 'No Light/Dark Variant'
           ),
           m('select.mdc-elevation--z2 m-select', {
             onchange: events.themes

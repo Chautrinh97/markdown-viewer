@@ -35,5 +35,5 @@ importScripts('/background/icon.js')
   chrome.tabs.onUpdated.addListener(detect.tab)
   chrome.runtime.onMessage.addListener(messages)
 
-  icon()
+  storage.ready.then(icon)
 })()
